@@ -16,6 +16,8 @@ import UpdateSection from './UpdateSection';
 import { COST_TRACKING_ENABLED, UPDATES_ENABLED } from '../../../updates';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import ThemeSelector from '../../GooseSidebar/ThemeSelector';
+import ToggleDaylight from '../../toggle-daylight/ToggleDaylight';
+import { useTheme } from '../../../contexts/ThemeContext';
 import BlockLogoBlack from './icons/block-lockup_black.png';
 import BlockLogoWhite from './icons/block-lockup_white.png';
 import TelemetrySettings from './TelemetrySettings';
@@ -179,6 +181,7 @@ interface AppSettingsSectionProps {
 }
 
 export default function AppSettingsSection({ scrollToSection }: AppSettingsSectionProps) {
+  const { resolvedTheme, setUserThemePreference } = useTheme();
   const [menuBarIconEnabled, setMenuBarIconEnabled] = useState(true);
   const [dockIconEnabled, setDockIconEnabled] = useState(true);
   const [wakelockEnabled, setWakelockEnabled] = useState(true);
@@ -471,7 +474,13 @@ export default function AppSettingsSection({ scrollToSection }: AppSettingsSecti
           <CardTitle className="mb-1">{intl.formatMessage(i18n.themeTitle)}</CardTitle>
           <CardDescription>{intl.formatMessage(i18n.themeDesc)}</CardDescription>
         </CardHeader>
-        <CardContent className="pt-4 px-4">
+        <CardContent className="pt-4 px-4 space-y-6">
+          <div className="toggle-daylight-host flex justify-center py-2">
+            <ToggleDaylight
+              night={resolvedTheme === 'dark'}
+              onNightChange={(night) => setUserThemePreference(night ? 'dark' : 'light')}
+            />
+          </div>
           <ThemeSelector className="w-auto" hideTitle horizontal />
         </CardContent>
       </Card>
